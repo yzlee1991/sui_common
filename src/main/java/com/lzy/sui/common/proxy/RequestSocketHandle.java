@@ -21,8 +21,9 @@ public class RequestSocketHandle extends AbstractSocketHandle implements Invocat
 
 	protected long requestTimeout = 10000;
 
-	public RequestSocketHandle(Socket socket, Object target, String identityId, String targetId) {
-		super(socket, target, identityId, targetId);
+	public RequestSocketHandle(Socket socket, Object target, String identityId, String targetId,
+			ProtocolEntity.Mode mode) {
+		super(socket, target, identityId, targetId, mode);
 	}
 
 	@Override
@@ -61,6 +62,7 @@ public class RequestSocketHandle extends AbstractSocketHandle implements Invocat
 		protocol.setParams(params);
 		protocol.setIdentityId(identityId);
 		protocol.setTargetId(targetId);
+		protocol.setMode(mode);
 		String json = gson.toJson(protocol);
 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -68,19 +70,24 @@ public class RequestSocketHandle extends AbstractSocketHandle implements Invocat
 		bw.newLine();
 		bw.flush();
 
-		synchronized (conversationId) {
-			try {
-				conversationId.wait(requestTimeout);
-				Object reply=conversationMap.get(conversationId);
-				if(reply==null){
-					throw new RuntimeException("请求超时");
+		if(ProtocolEntity.Mode.INVOKE==mode){//调用模式
+			synchronized (conversationId) {
+				try {
+					conversationId.wait(requestTimeout);
+					Object reply = conversationMap.get(conversationId);
+					if (reply == null) {
+						throw new RuntimeException("请求超时");
+					}
+					return reply;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-				return reply;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				conversationMap.remove(conversationId);
 			}
-			conversationMap.remove(conversationId);
+		}else{
+			//命令模式
 		}
+		
 
 		return null;
 	}

@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ProtocolEntity {
 
-	public static String TARGER_SERVER="TARGER_SERVER";
-	
+	public final static String TARGER_SERVER = "TARGER_SERVER";
+
 	public enum Identity {
 		USER, CORPSE
 	}
@@ -16,6 +16,10 @@ public class ProtocolEntity {
 
 	public enum ReplyState {
 		SUCCESE, FAIL
+	}
+
+	public enum Mode {
+		INVOKE, COMMAND
 	}
 
 	// 会话ID
@@ -44,6 +48,8 @@ public class ProtocolEntity {
 	private String targetId;
 	// 系统用户名
 	private String sysUserName;
+	// 模式 0：调用 1：命令
+	private Mode mode;
 
 	public String getConversationId() {
 		return conversationId;
@@ -149,12 +155,20 @@ public class ProtocolEntity {
 		this.className = className;
 	}
 
+	public Mode getMode() {
+		return mode;
+	}
+
+	public void setMode(Mode mode) {
+		this.mode = mode;
+	}
+
 	@Override
 	public String toString() {
 		return "ProtocolEntity [conversationId=" + conversationId + ", identity=" + identity + ", type=" + type
 				+ ", className=" + className + ", methodName=" + methodName + ", paramsType=" + paramsType + ", params="
 				+ params + ", reply=" + reply + ", replyState=" + replyState + ", errmsg=" + errmsg + ", identityId="
-				+ identityId + ", targetId=" + targetId + ", sysUserName=" + sysUserName + "]";
+				+ identityId + ", targetId=" + targetId + ", sysUserName=" + sysUserName + ", mode=" + mode + "]";
 	}
 
 }

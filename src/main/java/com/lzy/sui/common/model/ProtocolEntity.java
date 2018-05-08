@@ -4,6 +4,8 @@ import java.util.List;
 
 public class ProtocolEntity {
 
+	public static String TARGER_SERVER="TARGER_SERVER";
+	
 	public enum Identity {
 		USER, CORPSE
 	}

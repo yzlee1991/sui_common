@@ -12,18 +12,18 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
 import com.lzy.sui.common.abs.AbstractSocketHandle;
+import com.lzy.sui.common.model.Conversation;
 import com.lzy.sui.common.model.ProtocolEntity;
 import com.lzy.sui.common.utils.CommonUtils;
 import com.lzy.sui.common.utils.MillisecondClock;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
-public class RequestSocketHandle extends AbstractSocketHandle implements InvocationHandler {
+public class CommonRequestSocketHandle extends AbstractSocketHandle implements InvocationHandler {
 
-	protected long requestTimeout = 10000;
+	// protected long requestTimeout = 10000;
 
-	public RequestSocketHandle(Socket socket, Object target, String identityId, String targetId,
-			ProtocolEntity.Mode mode) {
-		super(socket, target, identityId, targetId, mode);
+	public CommonRequestSocketHandle(Socket socket, Object target, String targetId) {
+		super(socket, target, targetId);
 	}
 
 	@Override
@@ -52,42 +52,50 @@ public class RequestSocketHandle extends AbstractSocketHandle implements Invocat
 
 		}
 
-		ProtocolEntity protocol = new ProtocolEntity();
+		ProtocolEntity entity = new ProtocolEntity();
 		String conversationId = UUID.randomUUID().toString();
-		protocol.setConversationId(conversationId);
-		protocol.setType(ProtocolEntity.Type.REQUEST);
-		protocol.setClassName(target.getClass().getName());
-		protocol.setMethodName(method.getName());
-		protocol.setParamsType(paramsType);
-		protocol.setParams(params);
-		protocol.setIdentityId(identityId);
-		protocol.setTargetId(targetId);
-		protocol.setMode(mode);
-		String json = gson.toJson(protocol);
+		entity.setConversationId(conversationId);
+		entity.setType(ProtocolEntity.Type.COMMONREQUEST);
+		entity.setClassName(target.getClass().getName());
+		entity.setMethodName(method.getName());
+		entity.setParamsType(paramsType);
+		entity.setParams(params);
+		// entity.setIdentityId(identityId);
+		entity.setTargetId(targetId);
+		// entity.setMode(mode);
+		String json = gson.toJson(entity);
 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		bw.write(json);
 		bw.newLine();
 		bw.flush();
 
-		if(ProtocolEntity.Mode.INVOKE==mode){//调用模式
-			synchronized (conversationId) {
-				try {
-					conversationId.wait(requestTimeout);
-					Object reply = conversationMap.get(conversationId);
-					if (reply == null) {
-						throw new RuntimeException("请求超时");
-					}
-					return reply;
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+		Conversation.Data data = new Conversation.Data();
+		String lock = new String(conversationId);
+		data.setLock(lock);
+		Conversation.MAP.put(conversationId, data);
+		synchronized (lock) {
+			try {
+				lock.wait(Conversation.REQUESTTIMEOUT);
+				ProtocolEntity replyEntity = Conversation.MAP.get(conversationId).getEntity();
+				Conversation.MAP.remove(conversationId);
+				if (replyEntity == null) {
+					throw new RuntimeException("请求超时");
 				}
-				conversationMap.remove(conversationId);
+				if (ProtocolEntity.ReplyState.SUCCESE == replyEntity.getReplyState()) {
+					String base64Reply = replyEntity.getReply();
+					byte[] bytes = Base64.decode(base64Reply);
+					Object reply = CommonUtils.byteArraytoObject(bytes);
+					return reply;
+				} else if (ProtocolEntity.ReplyState.ERROR == replyEntity.getReplyState()) {
+					throw new RuntimeException(replyEntity.getReply());
+				} else {
+					// 未定义的回复状态
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		}else{
-			//命令模式
 		}
-		
 
 		return null;
 	}

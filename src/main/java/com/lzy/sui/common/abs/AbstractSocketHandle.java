@@ -11,7 +11,8 @@ import com.lzy.sui.common.model.ProtocolEntity;
 
 public abstract class AbstractSocketHandle {
 
-	public static ConcurrentMap<String, Object> conversationMap = new ConcurrentHashMap<String, Object>();
+	// public static ConcurrentMap<String, Object> conversationMap = new
+	// ConcurrentHashMap<String, Object>();
 
 	protected Gson gson = new Gson();
 
@@ -19,11 +20,11 @@ public abstract class AbstractSocketHandle {
 
 	protected Object target;
 
-	protected String identityId;
+	// protected String identityId;
 
 	protected String targetId;
 
-	protected ProtocolEntity.Mode mode;
+//	protected ProtocolEntity.Mode mode;
 
 	// 基础类型
 	@SuppressWarnings("serial")
@@ -42,16 +43,15 @@ public abstract class AbstractSocketHandle {
 		}
 	};
 
-	protected AbstractSocketHandle(Socket socket, Object target, String identityId, String targetId,
-			ProtocolEntity.Mode mode) {
-		if(ProtocolEntity.Mode.INVOKE!=mode&&ProtocolEntity.Mode.COMMAND!=mode){
-			throw new RuntimeException("非法的代理模式，mode："+mode);
-		}
+	protected AbstractSocketHandle(Socket socket, Object target, String targetId) {
+//		if (ProtocolEntity.Mode.INVOKE != mode && ProtocolEntity.Mode.COMMAND != mode) {
+//			throw new RuntimeException("非法的代理模式，mode：" + mode);
+//		}
 		this.socket = socket;
 		this.target = target;
-		this.identityId = identityId;
+		// this.identityId = identityId;
 		this.targetId = targetId;
-		this.mode = mode;
+//		this.mode = mode;
 	}
 
 }

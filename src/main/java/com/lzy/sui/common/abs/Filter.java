@@ -9,22 +9,11 @@ public abstract class Filter {
 
 	protected Filter filter;
 
-	protected Socket socket;
-
 	public void register(Filter filter) {
 		this.filter = filter;
 	}
 
 	public abstract void handle(ProtocolEntity entity);
 
-
-	
-	public Socket getSocket() {
-		return socket;
-	}
-
-	public void setSocket(Socket socket) {
-		this.socket = socket;
-	}
 	
 }

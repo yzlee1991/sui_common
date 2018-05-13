@@ -94,4 +94,10 @@ public class FileService implements FileInf{
 		
 	}
 
+	@Override
+	public String show(String a) {
+		System.out.println("调用成功");
+		return "123123";
+	}
+
 }

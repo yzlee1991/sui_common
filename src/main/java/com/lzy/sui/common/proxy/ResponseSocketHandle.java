@@ -25,37 +25,43 @@ public class ResponseSocketHandle extends AbstractSocketHandle implements Invoca
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		// 反射的调用异常需要处理
-		Object returnValue = method.invoke(target, args);
-
-		if(ProtocolEntity.Mode.INVOKE==mode){//调用模式
-			byte[] bytes = CommonUtils.ObjectToByteArray(returnValue);
-			String base64Reply = Base64.encode(bytes);
-
-			// List<String> paramsType = new ArrayList<String>();
-			// for (Class<?> type : method.getParameterTypes()) {
-			// paramsType.add(type.getTypeName());
-			// }
-
-			ProtocolEntity protocol = new ProtocolEntity();
-			protocol.setConversationId(conversationId);
-			protocol.setType(ProtocolEntity.Type.RESPONSE);
-			protocol.setReplyState(ProtocolEntity.ReplyState.SUCCESE);
-			// protocol.setMethodName(method.getName());
-			// protocol.setParamsType(paramsType);
-			protocol.setReply(base64Reply);
-			protocol.setIdentityId(identityId);
-			protocol.setTargetId(targetId);
-			String json = gson.toJson(protocol);
-
+		if (ProtocolEntity.Mode.INVOKE == mode) {// 调用模式
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			String json="";
+			try {
+				Object returnValue = method.invoke(target, args);
+				byte[] bytes = CommonUtils.ObjectToByteArray(returnValue);
+				String base64Reply = Base64.encode(bytes);
+
+				ProtocolEntity entity = new ProtocolEntity();
+				entity.setConversationId(conversationId);
+				entity.setType(ProtocolEntity.Type.RESPONSE);
+				entity.setReplyState(ProtocolEntity.ReplyState.SUCCESE);
+				entity.setReply(base64Reply);
+				entity.setIdentityId(identityId);
+				entity.setTargetId(targetId);
+				json = gson.toJson(entity);
+
+			} catch (Exception e) {
+				System.out.println("捕获到调用异常");
+				e.printStackTrace();
+				ProtocolEntity entity = new ProtocolEntity();
+				entity.setConversationId(conversationId);
+				entity.setType(ProtocolEntity.Type.RESPONSE);
+				entity.setReplyState(ProtocolEntity.ReplyState.ERROR);
+				entity.setReply(e.getMessage());//先简单处理，之后输出整个异常栈信息
+				entity.setIdentityId(identityId);
+				entity.setTargetId(targetId);
+				json = gson.toJson(entity);
+			}
 			bw.write(json);
 			bw.newLine();
 			bw.flush();
-		}else{
-			//命令模式
+			
+		} else {// 命令模式
+			method.invoke(target, args);
 		}
-		
+
 		return null;
 
 	}

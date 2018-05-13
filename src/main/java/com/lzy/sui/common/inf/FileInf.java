@@ -9,5 +9,7 @@ public interface FileInf {
 	public List<TreeFileList> getFileList();
 
 	public byte[] getFilePart(String filePath, int partSize, int partNum);
+
+	public String show(String a);
 	
 }

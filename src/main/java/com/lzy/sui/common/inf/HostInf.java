@@ -5,7 +5,8 @@ package com.lzy.sui.common.inf;
  * date   :2018年5月8日下午5:13:32
  */
 
-public interface HostInf {
+public interface HostInf extends Rmiable{
 
+	public String a(int a);
 	
 }

@@ -11,7 +11,7 @@ import com.lzy.sui.common.model.ProtocolEntity;
 
 public abstract class AbstractSocketHandle {
 
-	public static ConcurrentMap<String, Object> conversationMap = new ConcurrentHashMap<String, Object>();
+//	public static ConcurrentMap<String, Object> conversationMap = new ConcurrentHashMap<String, Object>();
 
 	protected Gson gson = new Gson();
 

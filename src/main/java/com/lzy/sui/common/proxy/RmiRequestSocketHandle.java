@@ -91,10 +91,15 @@ public class RmiRequestSocketHandle implements InvocationHandler {
 		bw.newLine();
 		bw.flush();
 		
-		synchronized (conversationId) {
+		
+		Conversation.Data data = new Conversation.Data();
+		String lock = new String(conversationId);
+		data.setLock(lock);
+		Conversation.MAP.put(conversationId, data);
+		synchronized (lock) {
 			try {
-				conversationId.wait(Conversation.REQUESTTIMEOUT);
-				ProtocolEntity replyEntity = Conversation.MAP.get(conversationId);
+				lock.wait(Conversation.REQUESTTIMEOUT);
+				ProtocolEntity replyEntity = Conversation.MAP.get(conversationId).getEntity();
 				Conversation.MAP.remove(conversationId);
 				if (replyEntity == null) {
 					throw new RuntimeException("请求超时");

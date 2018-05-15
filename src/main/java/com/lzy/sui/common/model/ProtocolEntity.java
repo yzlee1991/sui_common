@@ -11,16 +11,16 @@ public class ProtocolEntity {
 	}
 
 	public enum Type {
-		COMMONREQUEST, RESPONSE, HEARTBEAT, RMI ,RMIREQUEST
+		COMMONREQUEST, RESPONSE, HEARTBEAT, RMI, RMIREQUEST
 	}
 
 	public enum ReplyState {
 		SUCCESE, ERROR
 	}
 
-	public enum Mode {
-		INVOKE, COMMAND
-	}
+	// public enum Mode {
+	// INVOKE, COMMAND
+	// }
 
 	// 会话ID
 	private String conversationId;
@@ -49,7 +49,7 @@ public class ProtocolEntity {
 	// 系统用户名
 	private String sysUserName;
 	// 模式 0：调用 1：命令
-	private Mode mode;
+	// private Mode mode;
 	// rmi服务名称
 	private String rmiName;
 
@@ -157,13 +157,13 @@ public class ProtocolEntity {
 		this.className = className;
 	}
 
-	public Mode getMode() {
-		return mode;
-	}
-
-	public void setMode(Mode mode) {
-		this.mode = mode;
-	}
+	// public Mode getMode() {
+	// return mode;
+	// }
+	//
+	// public void setMode(Mode mode) {
+	// this.mode = mode;
+	// }
 
 	public String getRmiName() {
 		return rmiName;
@@ -178,8 +178,7 @@ public class ProtocolEntity {
 		return "ProtocolEntity [conversationId=" + conversationId + ", identity=" + identity + ", type=" + type
 				+ ", className=" + className + ", methodName=" + methodName + ", paramsType=" + paramsType + ", params="
 				+ params + ", reply=" + reply + ", replyState=" + replyState + ", errmsg=" + errmsg + ", identityId="
-				+ identityId + ", targetId=" + targetId + ", sysUserName=" + sysUserName + ", mode=" + mode
-				+ ", rmiName=" + rmiName + "]";
+				+ identityId + ", targetId=" + targetId + ", sysUserName=" + sysUserName + ", rmiName=" + rmiName + "]";
 	}
 
 }

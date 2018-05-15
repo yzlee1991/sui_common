@@ -82,9 +82,9 @@ public class RmiRequestSocketHandle implements InvocationHandler {
 		entity.setMethodName(method.getName());
 		entity.setParamsType(paramsType);
 		entity.setParams(params);
-		entity.setIdentityId("1");//之后这个要在服务端维护
+//		entity.setIdentityId("1");//之后这个要在服务端维护
 //		entity.setTargetId(targetId);
-		entity.setMode(ProtocolEntity.Mode.INVOKE);//之后撤销
+//		entity.setMode(ProtocolEntity.Mode.INVOKE);//之后撤销
 		String json = gson.toJson(entity);
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		bw.write(json);

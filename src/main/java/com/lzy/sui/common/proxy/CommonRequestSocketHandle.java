@@ -22,9 +22,8 @@ public class CommonRequestSocketHandle extends AbstractSocketHandle implements I
 
 	// protected long requestTimeout = 10000;
 
-	public CommonRequestSocketHandle(Socket socket, Object target, String identityId, String targetId,
-			ProtocolEntity.Mode mode) {
-		super(socket, target, identityId, targetId, mode);
+	public CommonRequestSocketHandle(Socket socket, Object target, String targetId) {
+		super(socket, target, targetId);
 	}
 
 	@Override
@@ -61,9 +60,9 @@ public class CommonRequestSocketHandle extends AbstractSocketHandle implements I
 		entity.setMethodName(method.getName());
 		entity.setParamsType(paramsType);
 		entity.setParams(params);
-		entity.setIdentityId(identityId);
+		// entity.setIdentityId(identityId);
 		entity.setTargetId(targetId);
-		entity.setMode(mode);
+		// entity.setMode(mode);
 		String json = gson.toJson(entity);
 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -71,35 +70,31 @@ public class CommonRequestSocketHandle extends AbstractSocketHandle implements I
 		bw.newLine();
 		bw.flush();
 
-		if (ProtocolEntity.Mode.INVOKE == mode) {// 调用模式
-			Conversation.Data data = new Conversation.Data();
-			String lock = new String(conversationId);
-			data.setLock(lock);
-			Conversation.MAP.put(conversationId, data);
-			synchronized (lock) {
-				try {
-					lock.wait(Conversation.REQUESTTIMEOUT);
-					ProtocolEntity replyEntity = Conversation.MAP.get(conversationId).getEntity();
-					Conversation.MAP.remove(conversationId);
-					if (replyEntity == null) {
-						throw new RuntimeException("请求超时");
-					}
-					if (ProtocolEntity.ReplyState.SUCCESE == replyEntity.getReplyState()) {
-						String base64Reply = replyEntity.getReply();
-						byte[] bytes = Base64.decode(base64Reply);
-						Object reply = CommonUtils.byteArraytoObject(bytes);
-						return reply;
-					} else if (ProtocolEntity.ReplyState.ERROR == replyEntity.getReplyState()) {
-						throw new RuntimeException(replyEntity.getReply());
-					} else {
-						// 未定义的回复状态
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+		Conversation.Data data = new Conversation.Data();
+		String lock = new String(conversationId);
+		data.setLock(lock);
+		Conversation.MAP.put(conversationId, data);
+		synchronized (lock) {
+			try {
+				lock.wait(Conversation.REQUESTTIMEOUT);
+				ProtocolEntity replyEntity = Conversation.MAP.get(conversationId).getEntity();
+				Conversation.MAP.remove(conversationId);
+				if (replyEntity == null) {
+					throw new RuntimeException("请求超时");
 				}
+				if (ProtocolEntity.ReplyState.SUCCESE == replyEntity.getReplyState()) {
+					String base64Reply = replyEntity.getReply();
+					byte[] bytes = Base64.decode(base64Reply);
+					Object reply = CommonUtils.byteArraytoObject(bytes);
+					return reply;
+				} else if (ProtocolEntity.ReplyState.ERROR == replyEntity.getReplyState()) {
+					throw new RuntimeException(replyEntity.getReply());
+				} else {
+					// 未定义的回复状态
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		} else {
-			// 命令模式
 		}
 
 		return null;

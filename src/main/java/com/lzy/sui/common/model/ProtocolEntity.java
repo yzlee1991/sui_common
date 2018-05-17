@@ -11,7 +11,7 @@ public class ProtocolEntity {
 	}
 
 	public enum Type {
-		COMMONREQUEST, RESPONSE, HEARTBEAT, RMI, RMIREQUEST
+		COMMONREQUEST, RESPONSE, HEARTBEAT, RMI, RMIREQUEST, PUSH
 	}
 
 	public enum ReplyState {
@@ -26,7 +26,7 @@ public class ProtocolEntity {
 	private String conversationId;
 	// 身份 0：用户 2：僵尸
 	private Identity identity;
-	// 协议类型 0：普通请求 1：回复 2：心跳 3:rmi 4：rmi请求
+	// 协议类型 0：普通请求 1：回复 2：心跳 3:rmi 4：rmi请求 5：推送
 	private Type type;
 	// 全限定类名
 	private String className;
@@ -41,7 +41,7 @@ public class ProtocolEntity {
 	// 回复状态 0:成功 1：失败
 	private ReplyState replyState;
 	// 异常信息
-	private String errmsg;
+	// private String errmsg;
 	// 身份ID
 	private String identityId;
 	// 目标ID
@@ -133,13 +133,13 @@ public class ProtocolEntity {
 		this.replyState = replyState;
 	}
 
-	public String getErrmsg() {
-		return errmsg;
-	}
-
-	public void setErrmsg(String errmsg) {
-		this.errmsg = errmsg;
-	}
+	// public String getErrmsg() {
+	// return errmsg;
+	// }
+	//
+	// public void setErrmsg(String errmsg) {
+	// this.errmsg = errmsg;
+	// }
 
 	public String getSysUserName() {
 		return sysUserName;
@@ -177,8 +177,8 @@ public class ProtocolEntity {
 	public String toString() {
 		return "ProtocolEntity [conversationId=" + conversationId + ", identity=" + identity + ", type=" + type
 				+ ", className=" + className + ", methodName=" + methodName + ", paramsType=" + paramsType + ", params="
-				+ params + ", reply=" + reply + ", replyState=" + replyState + ", errmsg=" + errmsg + ", identityId="
-				+ identityId + ", targetId=" + targetId + ", sysUserName=" + sysUserName + ", rmiName=" + rmiName + "]";
+				+ params + ", reply=" + reply + ", replyState=" + replyState + ", identityId=" + identityId
+				+ ", targetId=" + targetId + ", sysUserName=" + sysUserName + ", rmiName=" + rmiName + "]";
 	}
 
 }

@@ -6,6 +6,10 @@ import com.lzy.sui.common.model.TreeFileList;
 
 public interface FileInf {
 
+	public List<TreeFileList> getRootList();
+	
+	public List<TreeFileList> getFileList(String filePath);
+	
 	public List<TreeFileList> getFileList();
 
 	public byte[] getFilePart(String filePath, int partSize, int partNum);

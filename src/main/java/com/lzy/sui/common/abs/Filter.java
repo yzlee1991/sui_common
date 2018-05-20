@@ -7,7 +7,7 @@ import com.lzy.sui.common.model.ProtocolEntity;
 
 public abstract class Filter {
 
-	protected Filter filter;
+	public Filter filter;
 
 	public void register(Filter filter) {
 		this.filter = filter;

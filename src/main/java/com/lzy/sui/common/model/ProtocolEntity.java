@@ -11,7 +11,7 @@ public class ProtocolEntity {
 	}
 
 	public enum Type {
-		COMMONREQUEST, RESPONSE, HEARTBEAT, RMI, RMIREQUEST, PUSH
+		COMMONREQUEST, RESPONSE, HEARTBEAT, RMI, RMIREQUEST, PUSH, EXIT
 	}
 
 	public enum ReplyState {
@@ -26,7 +26,7 @@ public class ProtocolEntity {
 	private String conversationId;
 	// 身份 0：用户 2：僵尸
 	private Identity identity;
-	// 协议类型 0：普通请求 1：回复 2：心跳 3:rmi 4：rmi请求 5：推送
+	// 协议类型 0：普通请求 1：回复 2：心跳 3:rmi 4：rmi请求 5：推送 6：断开连接
 	private Type type;
 	// 全限定类名
 	private String className;

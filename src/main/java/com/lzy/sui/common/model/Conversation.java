@@ -31,6 +31,6 @@ public class Conversation {
 
 	public static ConcurrentMap<String, Data> MAP = new ConcurrentHashMap<String, Data>();
 
-	public static long REQUESTTIMEOUT = 10000;
+	public static long REQUESTTIMEOUT = 50000;
 
 }

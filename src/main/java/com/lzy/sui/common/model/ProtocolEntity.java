@@ -177,8 +177,8 @@ public class ProtocolEntity {
 	public String toString() {
 		return "ProtocolEntity [conversationId=" + conversationId + ", identity=" + identity + ", type=" + type
 				+ ", className=" + className + ", methodName=" + methodName + ", paramsType=" + paramsType + ", params="
-				+ params + ", reply=" + reply + ", replyState=" + replyState + ", identityId=" + identityId
-				+ ", targetId=" + targetId + ", sysUserName=" + sysUserName + ", rmiName=" + rmiName + "]";
+				+ params + ", replyState=" + replyState + ", identityId=" + identityId + ", targetId=" + targetId
+				+ ", sysUserName=" + sysUserName + ", rmiName=" + rmiName + "]";
 	}
 
 }

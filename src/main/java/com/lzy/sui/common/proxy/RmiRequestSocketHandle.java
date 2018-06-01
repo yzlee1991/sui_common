@@ -21,8 +21,6 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class RmiRequestSocketHandle implements InvocationHandler {
 
-//	protected Gson gson = new Gson();
-	
 	// 基础类型
 	@SuppressWarnings("serial")
 	protected Set<Class<?>> baseType = new HashSet<Class<?>>() {
@@ -86,11 +84,6 @@ public class RmiRequestSocketHandle implements InvocationHandler {
 //		entity.setIdentityId("1");//之后这个要在服务端维护
 //		entity.setTargetId(targetId);
 //		entity.setMode(ProtocolEntity.Mode.INVOKE);//之后撤销
-//		String json = gson.toJson(entity);
-//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//		bw.write(json);
-//		bw.newLine();
-//		bw.flush();
 		SocketUtils.send(socket, entity);
 		
 		

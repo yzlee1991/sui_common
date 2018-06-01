@@ -16,26 +16,20 @@ import com.lzy.sui.common.model.Conversation;
 import com.lzy.sui.common.model.ProtocolEntity;
 import com.lzy.sui.common.proxy.RmiRequestSocketHandle;
 import com.lzy.sui.common.utils.CommonUtils;
+import com.lzy.sui.common.utils.SocketUtils;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class RmiClient {
 
-	private static Gson gson = new Gson();
 
 	public static Object lookup(Socket socket, String rmiName) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		ProtocolEntity entity = new ProtocolEntity();
 		String conversationId = UUID.randomUUID().toString();
 		entity.setType(ProtocolEntity.Type.RMI);
 		entity.setConversationId(conversationId);
-		entity.setIdentityId("1");// 临时
 		entity.setRmiName(rmiName);
 
-		String json = gson.toJson(entity);
-		bw.write(json);
-		bw.newLine();
-		bw.flush();
+		SocketUtils.send(socket, entity);
 
 		
 		Conversation.Data data = new Conversation.Data();

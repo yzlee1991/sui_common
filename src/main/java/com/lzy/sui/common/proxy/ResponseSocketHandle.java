@@ -25,8 +25,6 @@ public class ResponseSocketHandle extends AbstractSocketHandle implements Invoca
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//		String json = "";
 		ProtocolEntity entity = new ProtocolEntity();
 		try {
 			Object returnValue = method.invoke(target, args);
@@ -39,7 +37,6 @@ public class ResponseSocketHandle extends AbstractSocketHandle implements Invoca
 			entity.setReply(base64Reply);
 			// entity.setIdentityId(identityId);
 			entity.setTargetId(targetId);
-//			json = gson.toJson(entity);
 
 		} catch (Exception e) {
 			System.out.println("捕获到调用异常");
@@ -50,12 +47,8 @@ public class ResponseSocketHandle extends AbstractSocketHandle implements Invoca
 			entity.setReply(e.getMessage());// 先简单处理，之后输出整个异常栈信息
 			// entity.setIdentityId(identityId);
 			entity.setTargetId(targetId);
-//			json = gson.toJson(entity);
 		}
 		SocketUtils.send(socket, entity);
-//		bw.write(json);
-//		bw.newLine();
-//		bw.flush();
 
 		return null;
 

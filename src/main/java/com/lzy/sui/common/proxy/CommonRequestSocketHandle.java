@@ -64,12 +64,7 @@ public class CommonRequestSocketHandle extends AbstractSocketHandle implements I
 		// entity.setIdentityId(identityId);
 		entity.setTargetId(targetId);
 		// entity.setMode(mode);
-//		String json = gson.toJson(entity);
-
-//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//		bw.write(json);
-//		bw.newLine();
-//		bw.flush();
+		
 		SocketUtils.send(socket, entity);
 
 		Conversation.Data data = new Conversation.Data();

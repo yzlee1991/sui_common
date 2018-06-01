@@ -18,7 +18,7 @@ public class SocketUtils {
 
 	// 非阻塞发送，目前只适用于服务端这种一个线程对应一个客户端不存在并发的情况
 	public static void sendByNoBlock(Socket socket, Object obj) throws IOException {
-		if (obj == null) {
+		if (obj == null || socket == null || socket.isClosed()) {
 			return;
 		}
 		String json = CommonUtils.gson.toJson(obj);
@@ -29,7 +29,7 @@ public class SocketUtils {
 	}
 
 	public static void send(Socket socket, Object obj) throws IOException {
-		if (obj == null) {
+		if (obj == null || socket == null || socket.isClosed()) {
 			return;
 		}
 		String json = CommonUtils.gson.toJson(obj);

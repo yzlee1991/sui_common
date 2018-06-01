@@ -16,6 +16,7 @@ import com.lzy.sui.common.model.Conversation;
 import com.lzy.sui.common.model.ProtocolEntity;
 import com.lzy.sui.common.utils.CommonUtils;
 import com.lzy.sui.common.utils.MillisecondClock;
+import com.lzy.sui.common.utils.SocketUtils;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class CommonRequestSocketHandle extends AbstractSocketHandle implements InvocationHandler {
@@ -63,12 +64,13 @@ public class CommonRequestSocketHandle extends AbstractSocketHandle implements I
 		// entity.setIdentityId(identityId);
 		entity.setTargetId(targetId);
 		// entity.setMode(mode);
-		String json = gson.toJson(entity);
+//		String json = gson.toJson(entity);
 
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		bw.write(json);
-		bw.newLine();
-		bw.flush();
+//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//		bw.write(json);
+//		bw.newLine();
+//		bw.flush();
+		SocketUtils.send(socket, entity);
 
 		Conversation.Data data = new Conversation.Data();
 		String lock = new String(conversationId);

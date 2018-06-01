@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import com.google.gson.Gson;
+
 public class CommonUtils {
 
+	public static Gson gson=new Gson();
+	
 	public static byte[] ObjectToByteArray(Object obj) {
 		byte[] bytes = null;
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();

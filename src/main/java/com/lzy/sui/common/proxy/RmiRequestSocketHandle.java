@@ -16,11 +16,12 @@ import com.google.gson.Gson;
 import com.lzy.sui.common.model.Conversation;
 import com.lzy.sui.common.model.ProtocolEntity;
 import com.lzy.sui.common.utils.CommonUtils;
+import com.lzy.sui.common.utils.SocketUtils;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class RmiRequestSocketHandle implements InvocationHandler {
 
-	protected Gson gson = new Gson();
+//	protected Gson gson = new Gson();
 	
 	// 基础类型
 	@SuppressWarnings("serial")
@@ -85,11 +86,12 @@ public class RmiRequestSocketHandle implements InvocationHandler {
 //		entity.setIdentityId("1");//之后这个要在服务端维护
 //		entity.setTargetId(targetId);
 //		entity.setMode(ProtocolEntity.Mode.INVOKE);//之后撤销
-		String json = gson.toJson(entity);
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		bw.write(json);
-		bw.newLine();
-		bw.flush();
+//		String json = gson.toJson(entity);
+//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//		bw.write(json);
+//		bw.newLine();
+//		bw.flush();
+		SocketUtils.send(socket, entity);
 		
 		
 		Conversation.Data data = new Conversation.Data();

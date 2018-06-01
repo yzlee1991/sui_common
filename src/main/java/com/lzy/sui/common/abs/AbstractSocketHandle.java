@@ -14,7 +14,7 @@ public abstract class AbstractSocketHandle {
 	// public static ConcurrentMap<String, Object> conversationMap = new
 	// ConcurrentHashMap<String, Object>();
 
-	protected Gson gson = new Gson();
+//	protected Gson gson = new Gson();
 
 	protected Socket socket;
 

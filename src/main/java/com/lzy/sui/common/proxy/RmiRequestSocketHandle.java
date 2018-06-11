@@ -51,11 +51,11 @@ public class RmiRequestSocketHandle implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Class<?> returnType = method.getReturnType();
-		if (!baseType.contains(returnType) && !Serializable.class.isAssignableFrom(returnType)) {
-			// 返回值类型不可序列化，抛异常
-			System.out.println("返回值不可传输");
-			return null;
-		}
+//		if (!baseType.contains(returnType) && !Serializable.class.isAssignableFrom(returnType)) {
+//			// 返回值类型不可序列化，抛异常
+//			System.out.println("返回值不可传输");
+//			return null;
+//		}
 
 		List<String> paramsType = new ArrayList<String>();
 		List<String> params = new ArrayList<String>();

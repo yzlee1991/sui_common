@@ -13,6 +13,7 @@ import com.lzy.sui.common.model.ProtocolEntity;
 
 public class SocketUtils {
 
+	final static String ENCODING="UTF-8";
 	private static Map<Socket, BufferedReader> brMap = new HashMap<Socket, BufferedReader>();
 	private static Map<Socket, BufferedWriter> bwMap = new HashMap<Socket, BufferedWriter>();
 
@@ -44,6 +45,10 @@ public class SocketUtils {
 	public static ProtocolEntity receive(Socket socket) throws IOException {
 		BufferedReader br = getBufferedReader(socket);
 		String json = br.readLine();
+		if(json==null){
+			//linux 下按crt+c关闭的时候socket正常关闭，readLine返回null，待验证
+			throw new RuntimeException("socket已关闭");
+		}
 		ProtocolEntity entity = CommonUtils.gson.fromJson(json, ProtocolEntity.class);
 		return entity;
 	}
@@ -56,7 +61,7 @@ public class SocketUtils {
 				if (br != null) {
 					return br;
 				}
-				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				br = new BufferedReader(new InputStreamReader(socket.getInputStream(),ENCODING));
 				brMap.put(socket, br);
 			}
 		}
@@ -71,7 +76,7 @@ public class SocketUtils {
 				if (bw != null) {
 					return bw;
 				}
-				bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+				bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(),ENCODING));
 				bwMap.put(socket, bw);
 			}
 		}

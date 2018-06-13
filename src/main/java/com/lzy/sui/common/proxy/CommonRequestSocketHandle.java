@@ -65,12 +65,13 @@ public class CommonRequestSocketHandle extends AbstractSocketHandle implements I
 		entity.setTargetId(targetId);
 		// entity.setMode(mode);
 		
-		SocketUtils.send(socket, entity);
-
 		Conversation.Data data = new Conversation.Data();
 		String lock = new String(conversationId);
 		data.setLock(lock);
 		Conversation.MAP.put(conversationId, data);
+		
+		SocketUtils.send(socket, entity);
+
 		synchronized (lock) {
 			try {
 				lock.wait(Conversation.REQUESTTIMEOUT);

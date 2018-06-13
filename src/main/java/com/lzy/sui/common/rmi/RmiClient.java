@@ -19,6 +19,7 @@ import com.lzy.sui.common.utils.CommonUtils;
 import com.lzy.sui.common.utils.SocketUtils;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
+//目前rmi远程调用对于返回值为long基础数据类型的调用会报错，这个之后需要解决
 public class RmiClient {
 
 
@@ -29,13 +30,14 @@ public class RmiClient {
 		entity.setConversationId(conversationId);
 		entity.setRmiName(rmiName);
 
-		SocketUtils.send(socket, entity);
-
-		
+		//先put再send，否则多线程会有问题
 		Conversation.Data data = new Conversation.Data();
 		String lock = new String(conversationId);
 		data.setLock(lock);
 		Conversation.MAP.put(conversationId, data);
+		
+		SocketUtils.send(socket, entity);
+
 		synchronized (lock) {
 			try {
 				lock.wait(Conversation.REQUESTTIMEOUT);
